@@ -5,13 +5,7 @@
   Time: 11:09 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%--
-  Created by IntelliJ IDEA.
-  User: kavee
-  Date: 2/5/2025
-  Time: 7:07 AM
-  To change this template use File | Settings | File Templates.
---%>
+
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
@@ -72,7 +66,9 @@
   <h1>Welcome, <%= userName %>! 🎉</h1>
   <p>You have successfully registered.</p>
   <a href="bookcab.jsp" class="logout">Book A Cab</a>
+<%--  <a href="viewbooking.jsp" class="logout">View Booking</a>--%>
   <a href="logout.jsp" class="logout">Logout</a>
+  <a href="ViewDrivers.jsp" class="logout">View Driver</a>
 </div>
 </body>
 </html>
