@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: kavee
+  User: Ashmal
   Date: 2/5/2025
   Time: 7:07 AM
   To change this template use File | Settings | File Templates.
@@ -65,6 +65,7 @@
   <h1>Welcome, <%= userName %>! 🎉</h1>
   <p>You have successfully registered.</p>
   <a href="bookcab.jsp" class="logout">Book A Cab</a>
+  <a href="viewbooking.jsp" class="logout">View Booking</a>
   <a href="logout.jsp" class="logout">Logout</a>
 </div>
 </body>
