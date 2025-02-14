@@ -18,41 +18,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Bookings</title>
+  <title>All Bookings</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 50px;
-      text-align: center;
-    }
-    table {
-      width: 80%;
-      margin: auto;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    button {
+    body { font-family: Arial, sans-serif; text-align: center; }
+    table { width: 80%; margin: auto; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 10px; }
+    th { background-color: #f2f2f2; }
+    .cancel-button {
       padding: 5px 10px;
-      background-color: #dc3545;
+      background-color: red;
       color: white;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #c82333;
+    .cancel-button:hover {
+      background-color: darkred;
     }
   </style>
 </head>
 <body>
-<h2>🚖 Your Cab Bookings</h2>
-<p>Welcome, <b><%= userName %></b>! Here are your bookings:</p>
+
+<h2>🚖 Your Bookings</h2>
+<p>Welcome, <b><%= userName %></b>!</p>
+
+<% String successMessage = request.getParameter("success"); %>
+<% if ("cancelled".equals(successMessage)) { %>
+<p style="color: green;">✅ Booking successfully cancelled.</p>
+<% } %>
 
 <table>
   <tr>
@@ -81,7 +73,7 @@
     <td>
       <form action="CancelBookingServlet" method="post">
         <input type="hidden" name="bookingId" value="<%= booking.getId() %>">
-        <button type="submit">Cancel</button>
+        <button type="submit" class="cancel-button">Cancel</button>
       </form>
     </td>
   </tr>
@@ -98,5 +90,6 @@
 <br>
 <a href="index.jsp">⬅ Go Back to Home</a>
 <a href="logout.jsp" class="logout">Logout</a>
+
 </body>
 </html>
