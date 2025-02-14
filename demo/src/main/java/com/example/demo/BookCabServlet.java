@@ -7,10 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 @WebServlet("/BookCabServlet")
 public class BookCabServlet extends HttpServlet {
@@ -31,7 +28,6 @@ public class BookCabServlet extends HttpServlet {
         String cabType = request.getParameter("cabType");
         String bookingTime = request.getParameter("bookingTime");
 
-        // Validate form data
         if (pickupLocation == null || pickupLocation.isEmpty() ||
                 dropLocation == null || dropLocation.isEmpty() ||
                 cabType == null || cabType.isEmpty() ||
@@ -40,36 +36,64 @@ public class BookCabServlet extends HttpServlet {
             return;
         }
 
-        // Database connection details
         String dbURL = "jdbc:mysql://127.0.0.1:3306/magacabs";
-        String dbUser = "root";
+        String dbUser  = "root";
         String dbPassword = "abc123";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPassword);
+            Connection conn = DriverManager.getConnection(dbURL, dbUser , dbPassword);
 
             // Insert booking into the database
-            String sql = "INSERT INTO bookings (userName, pickupLocation, dropLocation, cabType, bookingTime) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, userName);
-            stmt.setString(2, pickupLocation);
-            stmt.setString(3, dropLocation);
-            stmt.setString(4, cabType);
-            stmt.setString(5, bookingTime);
-
-            int rowsInserted = stmt.executeUpdate();
-            stmt.close();
-            conn.close();
+            String bookingSQL = "INSERT INTO bookings (userName, pickupLocation, dropLocation, cabType, bookingTime) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement bookingStmt = conn.prepareStatement(bookingSQL, Statement.RETURN_GENERATED_KEYS);
+            bookingStmt.setString(1, userName);
+            bookingStmt.setString(2, pickupLocation);
+            bookingStmt.setString(3, dropLocation);
+            bookingStmt.setString(4, cabType);
+            bookingStmt.setString(5, bookingTime);
+            int rowsInserted = bookingStmt.executeUpdate();
 
             if (rowsInserted > 0) {
-                response.sendRedirect("booking-success.jsp");
-            } else {
-                response.sendRedirect("booking-failed.jsp");
+                ResultSet generatedKeys = bookingStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int bookingId = generatedKeys.getInt(1);
+                    double fare = generateBill(conn, bookingId, userName, pickupLocation, dropLocation, cabType, bookingTime);
+                    // Redirect with fare information
+                    response.sendRedirect("booking-success.jsp?fare=" + fare);
+                    return; // Ensure to return after redirect
+                }
             }
+
+            bookingStmt.close();
+            conn.close();
+            response.sendRedirect("booking-failed.jsp");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             response.sendRedirect("booking-failed.jsp");
         }
+    }
+
+    private double generateBill(Connection conn, int bookingId, String userName, String pickup, String drop, String cabType, String time) throws SQLException {
+        double fare = calculateFare(pickup, drop, cabType);
+        String billSQL = "INSERT INTO bills (bookingId, userName, pickupLocation, dropLocation, cabType, bookingTime, fare, paymentStatus) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')";
+        PreparedStatement billStmt = conn.prepareStatement(billSQL);
+        billStmt.setInt(1, bookingId);
+        billStmt.setString(2, userName);
+        billStmt.setString(3, pickup);
+        billStmt.setString(4, drop);
+        billStmt.setString(5, cabType);
+        billStmt.setString(6, time);
+        billStmt.setDouble(7, fare);
+        billStmt.executeUpdate();
+        billStmt.close();
+        return fare; // Return the fare for redirection
+    }
+
+    private double calculateFare(String pickup, String drop, String cabType) {
+        double baseFare = 10.0;
+        double distanceRate = 2.0;
+        double cabMultiplier = cabType.equals("Luxury") ? 200 : cabType.equals("SUV") ? 150 : 100;
+        return baseFare + (distanceRate * 5) * cabMultiplier;
     }
 }
