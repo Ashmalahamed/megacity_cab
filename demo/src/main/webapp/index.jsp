@@ -1,8 +1,15 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: ahame
+  Date: 2/5/2025
+  Time: 7:19 AM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cab Service</title>
+    <title>Maga Cab Service</title>
 </head>
 <body>
 <style>
@@ -71,7 +78,7 @@
 
 <div class="container">
     <header>
-        <h1>Welcome to Cab Service</h1>
+        <h1>Welcome to Maga Cab Service</h1>
         <p>Your reliable partner for safe and comfortable rides.</p>
     </header>
     <nav>
