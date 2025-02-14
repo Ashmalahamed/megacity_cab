@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cab Service</title>
+    <title>Maga Cab Service</title>
 </head>
 <body>
 <style>
@@ -71,7 +71,7 @@
 
 <div class="container">
     <header>
-        <h1>Welcome to Cab Service</h1>
+        <h1>Welcome to Maga Cab Service</h1>
         <p>Your reliable partner for safe and comfortable rides.</p>
     </header>
     <nav>
