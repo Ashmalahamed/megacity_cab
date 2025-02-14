@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
-    private static final String ADMIN_EMAIL = "admin@example.com";
+    private static final String ADMIN_EMAIL = "admin@gmail.com";
     private static final String ADMIN_PASSWORD = "admin123";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
